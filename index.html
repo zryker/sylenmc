@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYLENMC Sitio Oficial</title>
+    <!-- FontAwesome & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #080304;
+            --card-bg: rgba(20, 8, 10, 0.85);
+            --card-border: rgba(255, 42, 42, 0.2);
+            --accent-red: #ff2a2a;
+            --accent-red-dark: #800000;
+            --accent-red-glow: rgba(255, 42, 42, 0.4);
+            --text-main: #f3f4f6;
+            --text-sub: #a1a1aa;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            
+            /* Social Colors */
+            --discord-color: #5865F2;
+            --tiktok-color: #ff0050;
+            --youtube-color: #ff0000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 42, 42, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(128, 0, 0, 0.2) 0%, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(255, 42, 42, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(8, 3, 4, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 0 20px var(--accent-red-glow);
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #ffffff, #ff2a2a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-sub);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            color: #fff;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            color: #fff;
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        .ip-header-btn {
+            background: rgba(255, 42, 42, 0.1);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ip-header-btn:hover {
+            background: rgba(255, 42, 42, 0.2);
+            transform: scale(1.02);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff2a2a;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff2a2a;
+        }
+
+        /* Hero Banner & Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .hero h2 {
+            font-size: 46px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            color: var(--text-sub);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards & RGB Glow Feature */
+        .rgb-card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .rgb-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(8px);
+            animation: rgbGlow 15s linear infinite;
+            opacity: 0.7;
+            border-radius: calc(var(--radius-lg) + 2px);
+        }
+
+        @keyframes rgbGlow {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 42, 42, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 42, 42, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--accent-red);
+            flex-shrink: 0;
+        }
+
+        .card-title h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .card-title span {
+            font-size: 13px;
+            color: var(--text-sub);
+        }
+
+        .card-body {
+            color: var(--text-sub);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        /* Discord Info Feature List */
+        .discord-features {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .discord-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #d1d5db;
+        }
+
+        .discord-features li i {
+            color: var(--discord-color);
+            margin-top: 3px;
+            font-size: 14px;
+        }
+
+        .discord-features li strong {
+            color: #fff;
+        }
+
+        /* Buttons & Actions */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff4444, #aa0000);
+            box-shadow: 0 0 20px var(--accent-red-glow);
+        }
+
+        .btn-discord {
+            background: var(--discord-color);
+            color: #fff;
+        }
+
+        .btn-discord:hover {
+            background: #4752C4;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-tiktok {
+            background: #000;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-tiktok:hover {
+            background: #111;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.4);
+            border-color: var(--tiktok-color);
+        }
+
+        .btn-youtube {
+            background: var(--youtube-color);
+            color: #fff;
+        }
+
+        .btn-youtube:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: #666;
+            cursor: not-allowed;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Minecraft Simulated Chat */
+        .mc-chat-container {
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(255, 42, 42, 0.3);
+            padding: 20px;
+            font-family: 'VT323', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+            margin-top: 30px;
+        }
+
+        .mc-chat-header {
+            color: #888;
+            font-size: 18px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mc-chat-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .mc-head {
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            image-rendering: pixelated;
+        }
+
+        .mc-user {
+            color: #aaa;
+            font-weight: bold;
+        }
+
+        .mc-msg {
+            color: #fff;
+        }
+
+        /* Interactive Guides & Tabs */
+        .edition-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn-edition {
+            padding: 12px 25px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--card-border);
+            background: rgba(20, 8, 10, 0.8);
+            color: var(--text-sub);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn-edition.active {
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            color: #fff;
+            border-color: #ff2a2a;
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        .guide-step {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff2a2a, #800000);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .code-box {
+            background: #000;
+            border: 1px dashed #ff2a2a;
+            padding: 8px 15px;
+            border-radius: var(--radius-sm);
+            color: #ff5555;
+            font-family: monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .badge-soon {
+            background: rgba(255, 42, 42, 0.15);
+            color: #ff5555;
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero h2 {
+                font-size: 32px;
+            }
+            .guide-step {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div class="toast-container">
+        <div class="toast" id="toast">
+            <i class="fa-solid fa-check-circle"></i>
+            <span id="toast-msg">¡Copiado al portapapeles!</span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo-container" onclick="navigateToTab('home')">
+            <div class="logo-img">
+                <i class="fa-solid fa-fire"></i>
+            </div>
+            <div class="logo-text">
+                <h1>SYLENMC</h1>
+                <span>Network Minecraft</span>
+            </div>
+        </div>
+
+        <nav>
+            <button class="nav-btn active" data-tab="home" onclick="navigateToTab('home')"><i class="fa-solid fa-house"></i> Inicio</button>
+            <button class="nav-btn" data-tab="how-to-join" onclick="navigateToTab('how-to-join')"><i class="fa-solid fa-gamepad"></i> ¿Cómo Entrar?</button>
+            <button class="nav-btn" data-tab="vote" onclick="navigateToTab('vote')"><i class="fa-solid fa-check-to-slot"></i> /vote</button>
+            <button class="nav-btn" data-tab="store" onclick="navigateToTab('store')"><i class="fa-solid fa-cart-shopping"></i> Tienda</button>
+            <button class="nav-btn" data-tab="events" onclick="navigateToTab('events')"><i class="fa-solid fa-calendar-star"></i> Eventos</button>
+            <button class="nav-btn" data-tab="socials" onclick="navigateToTab('socials')"><i class="fa-solid fa-share-nodes"></i> Redes Sociales</button>
+        </nav>
+
+        <div class="ip-header-btn" onclick="copyIP()">
+            <div class="online-dot"></div>
+            <span style="font-weight: 700; font-size: 14px;">sylenmc.diavlohosting.com</span>
+            <i class="fa-solid fa-copy" style="color: var(--accent-red);"></i>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- INICIO / HOME -->
+        <div id="home" class="page-section active">
+            <div class="hero">
+                <h2>Bienvenido a <span style="background: linear-gradient(90deg, #ff2a2a, #ff7777); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SYLENMC</span></h2>
+                <p>Servidor competitivo de Minecraft Java y Bedrock. ¡Entra y demuestra tu nivel en la arena!</p>
+            </div>
+
+            <div class="rgb-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <h3 style="font-size: 26px; margin-bottom: 8px;">¡Conéctate Ahora a SYLENMC!</h3>
+                        <p style="color: var(--text-sub);">Soporte completo para Minecraft Java y Bedrock (Pocket Edition, Consolas, PC).</p>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 14px 30px;" onclick="copyIP()">
+                        <i class="fa-solid fa-play"></i> Copiar IP
+                    </button>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Expanded Discord Card Home -->
+                <div class="card">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-icon" style="color: var(--discord-color); background: rgba(88, 101, 242, 0.1);">
+                                <i class="fa-brands fa-discord"></i>
+                            </div>
+                            <div class="card-title">
+                                <h3>Comunidad Discord</h3>
+                                <span>Centro Oficial de SYLENMC</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Únete al punto de encuentro principal de nuestra comunidad. Aquí tendrás acceso directo a:
+                            <ul class="discord-features">
+                                <li><i class="fa-solid fa-gift"></i> <div><strong>Sorteos y Recompensas:</strong> Participa por rangos VIP, llaves de cajas y monedas.</div></li>
+                                <li><i class="fa-solid fa-headset"></i> <div><strong>Soporte y Tickets:</strong> Reporta jugadores, realiza apelaciones y solicita ayuda al Staff.</div></li>
+                                <li><i class="fa-solid fa-bullhorn"></i> <div><strong>Anuncios en Vivo:</strong> Notificaciones de mantenimiento, actualizaciones e inicios de eventos.</div></li>
+                                <li><i class="fa-solid fa-users"></i> <div><strong>Comunidad & PvP:</strong> Canales para charlar, compartir clips y formar equipo.</div></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="https://discord.gg/nEMHE7Ub27" target="_blank" class="btn btn-discord">
+                        <i class="fa-brands fa-discord"></i> Unirse al Discord
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </div>
+                            <div class="card-title">
+                                <h3>Tienda del Servidor</h3>
+                                <span class="badge-soon">Próximamente</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Estamos configurando nuestra tienda oficial. Próximamente podrás comprar rangos exclusivos, beneficios y cosméticos.
+                        </div>
+                    </div>
+                    <button class="btn btn-disabled" disabled>
+                        <i class="fa-solid fa-clock"></i> Próximamente
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <div class="card-title">
+                                <h3>Eventos PvP</h3>
+                                <span>Semanal</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Organizamos torneos PvP y eventos especiales semanalmente dentro del servidor con premios increíbles.
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="navigateToTab('events')">
+                        <i class="fa-solid fa-arrow-right"></i> Ver Eventos
+                    </button>
+                </div>
+            </div>
+
+            <div class="mc-chat-container">
+                <div class="mc-chat-header">
+                    <span><i class="fa-solid fa-terminal"></i> Chat Global de SYLENMC</span>
+                    <span style="color: #ff2a2a;">● EN VIVO</span>
+                </div>
+                <div class="mc-chat-line">
+                    <img class="mc-head" src="https://mc-heads.net/avatar/Steve/24" alt="Steve">
+                    <span class="mc-user">Steve:</span>
+                    <span class="mc-msg">WOW este servidor es genial</span>
+                </div>
+                <div class="mc-chat-line">
+                    <img class="mc-head" src="https://mc-heads.net/avatar/Alex/24" alt="Alex">
+                    <span class="mc-user">Alex:</span>
+                    <span class="mc-msg">siii esta buenisimo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ¿CÓMO ENTRAR? -->
+        <div id="how-to-join" class="page-section">
+            <div class="hero">
+                <h2>¿Cómo Entrar a <span style="color: var(--accent-red);">SYLENMC</span>?</h2>
+                <p>Selecciona tu plataforma para ver los pasos de conexión exactos.</p>
+            </div>
+
+            <div class="edition-tabs">
+                <button class="tab-btn-edition active" id="btn-java" onclick="switchEdition('java')"><i class="fa-solid fa-desktop"></i> Java Edition (PC)</button>
+                <button class="tab-btn-edition" id="btn-bedrock" onclick="switchEdition('bedrock')"><i class="fa-solid fa-mobile-screen-button"></i> Bedrock (Celular / Consolas)</button>
+            </div>
+
+            <div id="guide-java" style="max-width: 800px; margin: 0 auto;">
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h3>Copia la Dirección IP</h3>
+                        <p style="color: var(--text-sub);">Para Java Edition solo necesitas copiar esta dirección:</p>
+                        <div class="code-box" onclick="copyIP()">
+                            <span>sylenmc.diavlohosting.com</span>
+                            <i class="fa-solid fa-copy"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h3>Añade el Servidor</h3>
+                        <p style="color: var(--text-sub);">Abre Minecraft Java > Multijugador > Añadir Servidor y pega la IP en la casilla Dirección del Servidor.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h3>Regístrate e Inicia Sesión</h3>
+                        <p style="color: var(--text-sub);">Una vez dentro del lobby, usa estos comandos en el chat (Tecla T):</p>
+                        <div class="code-box" onclick="copyText('/register tu_contraseña tu_contraseña', '¡Comando copiado!')">
+                            <span>/register [tu contraseña] [confirma tu contraseña]</span>
+                            <i class="fa-solid fa-copy"></i>
+                        </div>
+                        <br>
+                        <div class="code-box" onclick="copyText('/login tu_contraseña', '¡Comando copiado!')">
+                            <span>/login [tu contraseña]</span>
+                            <i class="fa-solid fa-copy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="guide-bedrock" style="max-width: 800px; margin: 0 auto; display: none;">
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h3>Datos de Conexión Bedrock</h3>
+                        <p style="color: var(--text-sub);">En Bedrock debes ingresar la IP y el Puerto correspondiente:</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <div class="code-box" onclick="copyIP()">
+                                <span>IP: sylenmc.diavlohosting.com</span>
+                                <i class="fa-solid fa-copy"></i>
+                            </div>
+                            <div class="code-box" onclick="copyText('19016', '¡Puerto copiado!')">
+                                <span>Puerto: 19016</span>
+                                <i class="fa-solid fa-copy"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h3>Guardar Servidor</h3>
+                        <p style="color: var(--text-sub);">Ve a Jugar > Servidores > Añadir Servidor. Coloca el nombre <b>SYLENMC</b>, pega la IP y el puerto <b>19016</b> y dale a Guardar.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h3>Regístrate en el Juego</h3>
+                        <p style="color: var(--text-sub);">Abre el chat e ingresa tus datos de registro igual que en Java:</p>
+                        <div class="code-box" onclick="copyText('/register tu_contraseña tu_contraseña', '¡Comando copiado!')">
+                            <span>/register [tu contraseña] [confirma tu contraseña]</span>
+                            <i class="fa-solid fa-copy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- /VOTE -->
+        <div id="vote" class="page-section">
+            <div class="hero">
+                <h2>Vota por <span style="color: var(--accent-red);">SYLENMC</span></h2>
+                <p>Plataforma de votos del servidor.</p>
+            </div>
+
+            <div style="text-align: center; padding: 60px 20px;" class="card">
+                <i class="fa-solid fa-box-open" style="font-size: 60px; color: var(--accent-red); margin-bottom: 20px;"></i>
+                <h3 style="font-size: 28px; margin-bottom: 10px;">Sistema de Votos Próximamente</h3>
+                <p style="color: var(--text-sub); max-width: 500px; margin: 0 auto 20px;">Estamos vinculando las páginas de votación para darte dinero y llaves recompensas dentro del servidor por cada voto.</p>
+                <div>
+                    <span class="badge-soon" style="font-size: 14px; padding: 8px 18px;">Próximamente</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIENDA -->
+        <div id="store" class="page-section">
+            <div class="hero">
+                <h2>Tienda Oficial de <span style="color: var(--accent-red);">SYLENMC</span></h2>
+                <p>Adquiere rangos y ventajas exclusivas.</p>
+            </div>
+
+            <div style="text-align: center; padding: 60px 20px;" class="card">
+                <i class="fa-solid fa-store-slash" style="font-size: 60px; color: var(--accent-red); margin-bottom: 20px;"></i>
+                <h3 style="font-size: 28px; margin-bottom: 10px;">Tienda Oficial Próximamente</h3>
+                <p style="color: var(--text-sub); max-width: 500px; margin: 0 auto 20px;">Muy pronto estará disponible el catálogo completo de rangos VIP, kits de inicio, llaves y paquetes de economía.</p>
+                <div>
+                    <span class="badge-soon" style="font-size: 14px; padding: 8px 18px;">Próximamente</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENTOS -->
+        <div id="events" class="page-section">
+            <div class="hero">
+                <h2>Eventos y <span style="color: var(--accent-red);">Sorteos Activos</span></h2>
+                <p>Participa en nuestras competencias periódicas y gana recompensas.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-swords"></i></div>
+                        <div class="card-title">
+                            <h3>Eventos PvP</h3>
+                            <span>Semanal</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Realizamos eventos y torneos PvP en la arena semanalmente. ¡Conéctate al servidor para demostrar quién manda!
+                    </div>
+                    <button class="btn btn-primary" onclick="copyIP()">
+                        <i class="fa-solid fa-gamepad"></i> Entrar a Jugar
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="color: var(--discord-color);"><i class="fa-brands fa-discord"></i></div>
+                        <div class="card-title">
+                            <h3>Sorteos en Discord</h3>
+                            <span>Activos Continuamente</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Únete a nuestro Discord oficial para participar en los sorteos de premios, rangos, llaves de cajas y recompensas exclusivas.
+                    </div>
+                    <a href="https://discord.gg/nEMHE7Ub27" target="_blank" class="btn btn-discord">
+                        <i class="fa-brands fa-discord"></i> Ir a Sorteos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- REDES SOCIALES -->
+        <div id="socials" class="page-section">
+            <div class="hero">
+                <h2>Nuestras <span style="color: var(--accent-red);">Redes Sociales</span></h2>
+                <p>Síguenos en nuestras plataformas oficiales para enterarte de todas las novedades y contenido multimedia.</p>
+            </div>
+
+            <!-- Detailed Discord Card Showcase -->
+            <div style="background: rgba(88, 101, 242, 0.08); border: 1px solid rgba(88, 101, 242, 0.3); border-radius: var(--radius-lg); padding: 35px; margin-bottom: 35px;">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div style="width: 60px; height: 60px; background: var(--discord-color); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);">
+                        <i class="fa-brands fa-discord"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 26px; font-weight: 800;">Servidor Oficial de Discord</h3>
+                        <p style="color: var(--text-sub);">El núcleo de la comunidad de SYLENMC. Todo lo que necesitas saber antes de unirte:</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                    <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fa-solid fa-ticket" style="font-size: 24px; color: var(--discord-color); margin-bottom: 10px;"></i>
+                        <h4 style="font-size: 16px; margin-bottom: 6px;">Soporte por Tickets</h4>
+                        <p style="font-size: 13px; color: var(--text-sub);">Atención personalizada de nuestro Staff para reportes de jugadores, dudas técnicas y apelaciones.</p>
+                    </div>
+
+                    <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fa-solid fa-gift" style="font-size: 24px; color: var(--discord-color); margin-bottom: 10px;"></i>
+                        <h4 style="font-size: 16px; margin-bottom: 6px;">Sorteos Exclusivos</h4>
+                        <p style="font-size: 13px; color: var(--text-sub);">Gana rangos VIP, llaves de crates especiales, coins de economía y ventajas ingame.</p>
+                    </div>
+
+                    <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fa-solid fa-bullhorn" style="font-size: 24px; color: var(--discord-color); margin-bottom: 10px;"></i>
+                        <h4 style="font-size: 16px; margin-bottom: 6px;">Anuncios e Info</h4>
+                        <p style="font-size: 13px; color: var(--text-sub);">Entérate en tiempo real de los mantenimientos, parches de actualización y torneos.</p>
+                    </div>
+
+                    <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fa-solid fa-gamepad" style="font-size: 24px; color: var(--discord-color); margin-bottom: 10px;"></i>
+                        <h4 style="font-size: 16px; margin-bottom: 6px;">Buscar Equipo PvP</h4>
+                        <p style="font-size: 13px; color: var(--text-sub);">Canales de voz y texto para conectar con otros usuarios, formar clanes y compartir jugadas.</p>
+                    </div>
+                </div>
+
+                <a href="https://discord.gg/nEMHE7Ub27" target="_blank" class="btn btn-discord" style="max-width: 320px; margin: 0 auto;">
+                    <i class="fa-brands fa-discord"></i> Unirme al Discord Oficial
+                </a>
+            </div>
+
+            <div class="cards-grid">
+                <!-- TikTok Card -->
+                <div class="card">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-icon" style="color: #fff; background: rgba(255, 0, 80, 0.15);">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </div>
+                            <div class="card-title">
+                                <h3>TikTok Oficial</h3>
+                                <span>@SYLENMC</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Sigue nuestra cuenta de TikTok para ver clips épicos de PvP, updates del servidor, momentos divertidos y anuncios especiales.
+                        </div>
+                    </div>
+                    <a href="https://www.tiktok.com" target="_blank" class="btn btn-tiktok">
+                        <i class="fa-brands fa-tiktok"></i> Ir a TikTok
+                    </a>
+                </div>
+
+                <!-- YouTube Card -->
+                <div class="card">
+                    <div>
+                        <div class="card-header">
+                            <div class="card-icon" style="color: var(--youtube-color); background: rgba(255, 0, 0, 0.15);">
+                                <i class="fa-brands fa-youtube"></i>
+                            </div>
+                            <div class="card-title">
+                                <h3>Canal de YouTube</h3>
+                                <span>SYLENMC Official</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Suscríbete a nuestro canal para ver trailers oficiales del servidor, resúmenes de eventos PvP y guías completas.
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com" target="_blank" class="btn btn-youtube">
+                        <i class="fa-brands fa-youtube"></i> Suscribirse
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 SYLENMC. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        const SERVER_IP = "sylenmc.diavlohosting.com";
+
+        // Navigation tab handler
+        function navigateToTab(tabId) {
+            // Hide all page sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all header buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show target section
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Highlight target nav button
+            const targetBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+
+            // Smooth scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Switch between Java and Bedrock guides
+        function switchEdition(edition) {
+            const guideJava = document.getElementById('guide-java');
+            const guideBedrock = document.getElementById('guide-bedrock');
+            const btnJava = document.getElementById('btn-java');
+            const btnBedrock = document.getElementById('btn-bedrock');
+
+            if (edition === 'java') {
+                guideJava.style.display = 'block';
+                guideBedrock.style.display = 'none';
+                btnJava.classList.add('active');
+                btnBedrock.classList.remove('active');
+            } else {
+                guideJava.style.display = 'none';
+                guideBedrock.style.display = 'block';
+                btnBedrock.classList.add('active');
+                btnJava.classList.remove('active');
+            }
+        }
+
+        // Copy IP helper
+        function copyIP() {
+            copyText(SERVER_IP, "¡IP sylenmc.diavlohosting.com copiada!");
+        }
+
+        // Generic text copy using fallback for compatibility
+        function copyText(text, message) {
+            const msg = message || "¡Copiado al portapapeles!";
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(msg);
+        }
+
+        // Toast Notification Display
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
